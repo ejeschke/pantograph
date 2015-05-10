@@ -19,6 +19,7 @@ pantograph.input_handler = function (e) {
 		x: e.offsetX || 0,
 		y: e.offsetY || 0,
 		button: e.button || 0,
+                delta: e.wheelDelta || 0,
 		alt_key: e.altKey || false,
 		ctrl_key: e.ctrlKey || false,
 		meta_key: e.metaKey || false,
@@ -26,6 +27,7 @@ pantograph.input_handler = function (e) {
 		key_code: e.keyCode || 0
 	}
 	ws.send(JSON.stringify(message));
+        //return false;
 }
 
 pantograph.redrawCanvas = function(mess, operation) {
@@ -36,6 +38,7 @@ pantograph.redrawCanvas = function(mess, operation) {
 	reqAnimFrame(function () {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		ctx.drawImage(hidCvs, 0, 0);
+                //console.log("Refresh canvas");
 	});
 }
 
@@ -74,7 +77,7 @@ pantograph.clearRect = function (ctx, rect) {
 
 pantograph.drawCircle = function(ctx, circle) {
 	ctx.beginPath();
-	ctx.arc(circle.x, circle.y, circle.radius, 	0, 2 * Math.PI, true);
+	ctx.arc(circle.x, circle.y, circle.radius, 0, 2 * Math.PI, true);
 	if (circle.lineColor) {
 		ctx.strokeStyle = circle.lineColor;
 		ctx.stroke();
@@ -150,6 +153,7 @@ pantograph.drawImage = function(ctx, imgInfo) {
 	var height = imgInfo.height || img.height;
 
 	ctx.drawImage(img, imgInfo.x, imgInfo.y, width, height);
+        //console.log("drew image");
 }
 
 pantograph.drawCompound = function(ctx, compound) {
@@ -173,6 +177,7 @@ pantograph.socket.onopen = function(e) {
 	canvas.onmousedown = pantograph.input_handler;
 	canvas.onmouseup   = pantograph.input_handler;
 	canvas.onmousemove = pantograph.input_handler;
+	canvas.onmousewheel= pantograph.input_handler;
 	canvas.onclick     = pantograph.input_handler;
 	canvas.ondblclick  = pantograph.input_handler;
 
